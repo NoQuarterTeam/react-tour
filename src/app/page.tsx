@@ -2,6 +2,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import Link from "next/link"
 import { Tour, TourContent, TourFooter, TourStep, TourTrigger } from "@/components/ui/tour"
 import { Button } from "@/components/ui/button"
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
+import { MenuIcon } from "lucide-react"
 
 const steps = [
   {
@@ -46,25 +48,37 @@ const steps = [
     target: "step-5",
     step: (
       <div>
-        <p>This is the final step of the tour.</p>
+        <p>This is the fifth step of the tour.</p>
+      </div>
+    ),
+  },
+  {
+    target: "step-6",
+    step: (
+      <div>
+        <p>This is the sixth step of the tour.</p>
       </div>
     ),
   },
 ] as TourStep[]
 
-export default function Home() {
+export default function Page() {
   return (
     <div className="flex gap-4 flex-col pt-20 max-w-3xl mx-auto h-[2000px]">
-      <h1 className="text-4xl font-bold">Welcome to the Tour</h1>
-      <Tour steps={steps}>
-        <TourTrigger asChild>
-          <Button variant="outline">Start Tour</Button>
-        </TourTrigger>
-        <TourContent>
-          <TourStep />
-          <TourFooter />
-        </TourContent>
-      </Tour>
+      <h1 className="text-4xl font-bold">Welcome to React Tour</h1>
+      <div>
+        <Tour steps={steps}>
+          <TourTrigger asChild>
+            <Button variant="outline" className="flex-grow-0">
+              Start Tour
+            </Button>
+          </TourTrigger>
+          <TourContent>
+            <TourStep />
+            <TourFooter />
+          </TourContent>
+        </Tour>
+      </div>
 
       <div className="grid grid-cols-3 gap-4">
         <Card className="step-1">
@@ -94,6 +108,20 @@ export default function Home() {
             <p>This is the third step of the tour</p>
           </CardContent>
         </Card>
+      </div>
+      <div>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="outline" size="icon" className="step-6">
+              <MenuIcon />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent side="bottom" align="start">
+            <DropdownMenuItem>Item 1</DropdownMenuItem>
+            <DropdownMenuItem>Item 2</DropdownMenuItem>
+            <DropdownMenuItem>Item 3</DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
       <div className="pt-[500px]">
         <Card className="step-4">

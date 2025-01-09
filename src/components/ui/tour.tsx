@@ -39,12 +39,8 @@ export function useTour({ steps }: UseTourProps) {
 
     if (target instanceof HTMLElement) {
       refs.setReference(target)
-      const windowHeight = window.innerHeight
-      const targetRect = target.getBoundingClientRect()
-      const targetTop = targetRect.top
-      // check if whole of target is in view, if not scroll to it
-      if (targetTop > windowHeight) target.scrollIntoView({ behavior: "smooth", block: "center" })
       update()
+      target.scrollIntoView({ behavior: "smooth", block: "center" })
     } else {
       console.warn(`Tour target not found: ${steps[currentStep].target}`)
       endTour()
