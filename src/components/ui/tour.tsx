@@ -19,8 +19,8 @@ interface UseTourProps {
   onClose?: () => void
 }
 
-export function useTour({ steps, onFinish, isOpen, onClose }: UseTourProps) {
-  const [currentStep, setCurrentStep] = useState<number | null>(isOpen ? 0 : null)
+export function useTour(props?: UseTourProps) {
+  const [currentStepIndex, setCurrentStepIndex] = useState<number | null>(props?.isOpen ? 0 : null)
   const arrowRef = useRef(null)
 
   const { elements, refs, floatingStyles, update, context } = useFloating({
@@ -29,73 +29,73 @@ export function useTour({ steps, onFinish, isOpen, onClose }: UseTourProps) {
   })
 
   useEffect(() => {
-    if (isOpen) {
-      setCurrentStep(0)
+    if (props?.isOpen) {
+      setCurrentStepIndex(0)
     } else {
-      setCurrentStep(null)
+      setCurrentStepIndex(null)
     }
-  }, [isOpen])
+  }, [props?.isOpen])
 
-  const startTour = useCallback(() => {
-    setCurrentStep(0)
+  const start = useCallback(() => {
+    setCurrentStepIndex(0)
   }, [])
 
-  const endTour = useCallback(() => {
-    setCurrentStep(null)
-    onClose?.()
-  }, [onClose])
+  const end = useCallback(() => {
+    setCurrentStepIndex(null)
+    props?.onClose?.()
+  }, [props?.onClose])
 
   useEffect(() => {
-    if (currentStep === null || steps.length === 0 || !steps[currentStep]) return
-    const target = document.querySelector(`.${steps[currentStep].target}`)
+    if (currentStepIndex === null || props?.steps.length === 0 || !props?.steps[currentStepIndex]) return
+    const target = document.querySelector(`.${props?.steps[currentStepIndex].target}`)
 
     if (target instanceof HTMLElement) {
       refs.setReference(target)
       update()
       target.scrollIntoView({ behavior: "smooth", block: "center" })
     } else {
-      console.warn(`Tour target not found: ${steps[currentStep].target}`)
-      endTour()
+      console.warn(`Tour target not found: ${props?.steps[currentStepIndex].target}`)
+      end()
     }
     const listener = (event: KeyboardEvent) => {
-      if (event.key === "Escape") endTour()
+      if (event.key === "Escape") end()
     }
     document.addEventListener("keydown", listener)
     return () => {
       document.removeEventListener("keydown", listener)
     }
-  }, [currentStep, update, endTour, steps, refs])
+  }, [currentStepIndex, update, end, props?.steps, refs])
 
   const nextStep = useCallback(() => {
-    if (currentStep !== null && currentStep < steps.length - 1) {
-      setCurrentStep(currentStep + 1)
+    if (currentStepIndex !== null && currentStepIndex < (props?.steps?.length ?? 0) - 1) {
+      setCurrentStepIndex(currentStepIndex + 1)
     } else {
-      endTour()
-      onFinish?.()
+      end()
+      props?.onFinish?.()
     }
-  }, [currentStep, steps.length, endTour, onFinish])
+  }, [currentStepIndex, props?.steps.length, end, props?.onFinish])
 
   const prevStep = useCallback(() => {
-    if (currentStep !== null && currentStep > 0) {
-      setCurrentStep(currentStep - 1)
+    if (currentStepIndex !== null && currentStepIndex > 0) {
+      setCurrentStepIndex(currentStepIndex - 1)
     }
-  }, [currentStep])
+  }, [currentStepIndex])
 
   return {
-    isEnabled: currentStep !== null,
-    currentStep: currentStep ?? 0,
-    currentTarget: elements.reference,
-    steps,
-    startTour,
-    endTour,
-    nextStep,
-    prevStep,
-    isLastStep: currentStep === steps.length - 1,
-    floatingProps: { ref: refs.setFloating, style: floatingStyles },
-    refs,
     arrowRef,
     context,
-    step: steps[currentStep ?? 0]!,
+    currentStep: props?.steps?.[currentStepIndex ?? 0]!,
+    currentStepIndex: currentStepIndex ?? 0,
+    currentTarget: elements.reference,
+    end,
+    floatingProps: { ref: refs.setFloating, style: floatingStyles },
+    isEnabled: currentStepIndex !== null,
+    isLastStep: currentStepIndex === (props?.steps?.length ?? 0) - 1,
+    nextStep,
+    prevStep,
+    refs,
+    start,
+    steps: props?.steps ?? [],
   }
 }
 
@@ -110,7 +110,7 @@ export function TourTrigger({
       {...props}
       onClick={(event) => {
         if (!event.defaultPrevented) {
-          tour?.startTour()
+          tour?.start()
         }
       }}
     />
@@ -123,16 +123,12 @@ export function Tour({
   children,
   steps,
   onFinish,
-  isEnabled,
+  isOpen,
   onClose,
 }: {
   children: React.ReactNode
-  steps: TourStep[]
-  onFinish?: () => void
-  isEnabled?: boolean
-  onClose?: () => void
-}) {
-  const tour = useTour(useMemo(() => ({ steps, onFinish, isEnabled, onClose }), [steps, onFinish, isEnabled, onClose]))
+} & UseTourProps) {
+  const tour = useTour(useMemo(() => ({ steps, onFinish, isOpen, onClose }), [steps, onFinish, isOpen, onClose]))
   return <TourContext.Provider value={tour}>{children}</TourContext.Provider>
 }
 
@@ -147,7 +143,7 @@ export function TourOverlay() {
   if (!tour.isEnabled) return null
   const rect = tour.currentTarget?.getBoundingClientRect()
   return (
-    <FloatingOverlay className="z-[9997]" onClick={tour.endTour} lockScroll>
+    <FloatingOverlay className="z-[9997]" onClick={tour.end} lockScroll>
       <div
         className="absolute bg-transparent rounded"
         style={{
@@ -185,7 +181,7 @@ export function TourContent({ children, className }: { children: React.ReactNode
 
 export function TourStep({ className }: { className?: string }) {
   const tour = useTourContext()
-  return <CardContent className={cn("p-4", className)}>{tour.step.step}</CardContent>
+  return <CardContent className={cn("p-4", className)}>{tour.currentStep.step}</CardContent>
 }
 
 export function TourFooter() {
@@ -193,7 +189,7 @@ export function TourFooter() {
   return (
     <CardFooter className="flex items-center justify-between p-3">
       <div className="flex-1">
-        <Button size="sm" variant="secondary" onClick={tour.prevStep} disabled={tour.currentStep === 0}>
+        <Button size="sm" variant="secondary" onClick={tour.prevStep} disabled={tour.currentStepIndex === 0}>
           Previous
         </Button>
       </div>
@@ -201,7 +197,7 @@ export function TourFooter() {
         {tour.steps.map(({ target }, index) => (
           <div
             key={`${target}-${index}`}
-            className={`w-2 h-2 rounded-full ${index === tour.currentStep ? "bg-primary" : "bg-muted"}`}
+            className={`w-2 h-2 rounded-full ${index === tour.currentStepIndex ? "bg-primary" : "bg-muted"}`}
           />
         ))}
       </div>

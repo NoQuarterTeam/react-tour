@@ -2,69 +2,9 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { Tour, TourArrow, TourContent, TourFooter, TourOverlay, TourStep, TourTrigger } from "@/components/ui/tour"
-import Link from "next/link"
 import { MenuIcon, WandSparklesIcon } from "lucide-react"
-
-const steps = [
-  {
-    target: "step-1",
-    step: (
-      <div className="flex flex-col gap-2">
-        <p>
-          This is the first step of the tour. Go{" "}
-          <Link target="_blank" href="https://github.com/NoQuarterTeam/react-tour" className="text-blue-500 hover:underline">
-            here
-          </Link>{" "}
-          to read more about it.
-        </p>
-      </div>
-    ),
-  },
-  {
-    target: "step-2",
-    step: (
-      <div>
-        <p>This is the second step of the tour.</p>
-      </div>
-    ),
-  },
-  {
-    target: "step-3",
-    step: (
-      <div>
-        <p>This is the third step of the tour.</p>
-        <Button size="sm" variant="outline">
-          Some action
-        </Button>
-      </div>
-    ),
-  },
-  {
-    target: "step-4",
-    step: (
-      <div>
-        <p>This is the fourth step of the tour.</p>
-      </div>
-    ),
-  },
-  {
-    target: "step-5",
-    step: (
-      <div>
-        <p>This is the fifth step of the tour.</p>
-      </div>
-    ),
-  },
-  {
-    target: "step-6",
-    step: (
-      <div>
-        <p>This is the sixth step of the tour.</p>
-        <p>Targets can be anything.</p>
-      </div>
-    ),
-  },
-] as TourStep[]
+import Link from "next/link"
+import { steps } from "./steps"
 
 export default function Page() {
   return (
@@ -77,7 +17,7 @@ export default function Page() {
         </Link>
       </div>
       <p>A simple and customizable tour guide component for React applications, using shadcn/ui and floating-ui.</p>
-      <div>
+      <div className="flex items-center gap-2">
         <Tour steps={steps}>
           <TourTrigger asChild>
             <Button className="flex-grow-0">

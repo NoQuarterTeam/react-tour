@@ -71,6 +71,10 @@ function App() {
 }
 ```
 
+If you want even more control, you can use the `useTour` hook directly and provide your own floating component.
+
+Have a look in the [pages](src/app) folder for examples.
+
 4. Add the target class to the elements you want to highlight.
 
 ```html
