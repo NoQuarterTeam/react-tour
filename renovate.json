@@ -1,8 +1,14 @@
 {
-  "extends": ["config:base"],
-  "baseBranches": ["main"],
+  "extends": [
+    "config:recommended"
+  ],
+  "baseBranches": [
+    "main"
+  ],
   "automerge": true,
-  "major": { "automerge": false },
-  "requiredStatusChecks": null,
+  "major": {
+    "automerge": false
+  },
+  "ignoreTests": true,
   "ignoreDeps": []
 }
