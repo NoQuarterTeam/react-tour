@@ -50,3 +50,7 @@ function App() {
 <div className="step-1">This is step 1</div>
 <div className="step-2">This is step 2</div>
 ```
+
+5. Customize the tour component as needed.
+
+The tour component uses shadcn/ui components, but feel free to render whatever you want and style however.

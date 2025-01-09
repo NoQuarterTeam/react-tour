@@ -65,7 +65,7 @@ const steps = [
 export default function Page() {
   return (
     <div className="flex gap-4 flex-col pt-20 max-w-3xl mx-auto h-[2000px]">
-      <h1 className="text-4xl font-bold">Welcome to React Tour</h1>
+      <h1 className="text-4xl font-bold">React Tour</h1>
       <div>
         <Tour steps={steps}>
           <TourTrigger asChild>
