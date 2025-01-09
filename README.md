@@ -20,15 +20,29 @@ bun install @floating-ui/react @radix-ui/react-slot
 import { Tour, TourContent, TourFooter, TourStep, TourTrigger } from "@/components/ui/tour"
 import { Button } from "@/components/ui/button"
 
-<Tour steps={[{target: "step-1", step: <div>This is step 1</div>, }, {target: "step-2", step: <div>This is step 2</div>, }]}>
-	<TourTrigger asChild>
-		<Button variant="outline" className="flex-grow-0">
-			Start Tour
-		</Button>
-	</TourTrigger>
-	<TourContent>
-		<TourStep />
-		<TourFooter />
-	</TourContent>
-</Tour>
+function App() {
+  return (
+    <Tour
+      steps={[
+        { target: "step-1", step: <div>This is step 1</div> },
+        { target: "step-2", step: <div>This is step 2</div> },
+      ]}
+    >
+      <TourTrigger asChild>
+        <Button>Start Tour</Button>
+      </TourTrigger>
+      <TourContent>
+        <TourStep />
+        <TourFooter />
+      </TourContent>
+    </Tour>
+  )
+}
+```
+
+4. Add the target class to the elements you want to highlight.
+
+```tsx
+<div className="step-1">This is step 1</div>
+<div className="step-2">This is step 2</div>
 ```
