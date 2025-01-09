@@ -4,7 +4,7 @@ A simple and customizable tour guide component for React applications, using tai
 
 ## Installation
 
-1. Copy the `tour.tsx` component into your project's components directory.
+1. Copy the [`tour.tsx`](src/components/ui/tour.tsx) component into your project's components directory.
 
 2. Install the required dependencies:
 
@@ -46,7 +46,7 @@ function App() {
 
 4. Add the target class to the elements you want to highlight.
 
-```tsx
+```html
 <div className="step-1">This is step 1</div>
 <div className="step-2">This is step 2</div>
 ```
