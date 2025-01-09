@@ -1,9 +1,9 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import Link from "next/link"
-import { Tour, TourContent, TourFooter, TourStep, TourTrigger } from "@/components/ui/tour"
 import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
+import { Tour, TourContent, TourFooter, TourStep, TourTrigger } from "@/components/ui/tour"
 import { MenuIcon } from "lucide-react"
+import Link from "next/link"
 
 const steps = [
   {
@@ -12,7 +12,7 @@ const steps = [
       <div className="flex flex-col gap-2">
         <p>
           This is the first step of the tour. Go{" "}
-          <Link href="/" className="text-blue-500 hover:underline">
+          <Link target="_blank" href="https://github.com/NoQuarterTeam/react-tour" className="text-blue-500 hover:underline">
             here
           </Link>{" "}
           to read more about it.
@@ -66,6 +66,7 @@ export default function Page() {
   return (
     <div className="flex gap-4 flex-col pt-20 max-w-3xl mx-auto h-[2000px]">
       <h1 className="text-4xl font-bold">React Tour</h1>
+      <p>A simple and customizable tour guide component for React applications, using tailwindcss, shadcn/ui and @floating-ui.</p>
       <div>
         <Tour steps={steps}>
           <TourTrigger asChild>

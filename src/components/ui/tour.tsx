@@ -1,6 +1,6 @@
 "use client"
 
-import { Button, type ButtonProps } from "@/components/ui/button"
+import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardFooter } from "@/components/ui/card"
 import { cn } from "@/lib/utils"
 import { FloatingArrow, FloatingOverlay, arrow, autoPlacement, autoUpdate, offset, shift, useFloating } from "@floating-ui/react"
@@ -86,7 +86,10 @@ export function useTour({ steps }: UseTourProps) {
   }
 }
 
-export function TourTrigger({ asChild, ...props }: { children: React.ReactNode; asChild?: boolean } & ButtonProps) {
+export function TourTrigger({
+  asChild,
+  ...props
+}: { children: React.ReactNode; asChild?: boolean } & React.ComponentProps<"button">) {
   const tour = useTourContext()
   const Comp = asChild ? Slot : "button"
   return (
@@ -114,7 +117,11 @@ export function useTourContext() {
   return tour
 }
 
-export function TourContent({ children, className }: { children: React.ReactNode; className?: string }) {
+export function TourContent({
+  children,
+  className,
+  arrowClassName,
+}: { children: React.ReactNode; className?: string; arrowClassName?: string }) {
   const tour = useTourContext()
   if (!tour.isEnabled) return null
   const rect = tour.currentTarget?.getBoundingClientRect()
@@ -137,7 +144,7 @@ export function TourContent({ children, className }: { children: React.ReactNode
         <FloatingArrow
           ref={tour.arrowRef}
           context={tour.context}
-          className="fill-popover [&>path:first-of-type]:stroke-border [&>path:last-of-type]:stroke-border"
+          className={cn("fill-popover [&>path:first-of-type]:stroke-border [&>path:last-of-type]:stroke-border", arrowClassName)}
         />
         {children}
       </Card>
