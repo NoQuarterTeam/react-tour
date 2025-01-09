@@ -5,7 +5,7 @@ import { Card, CardContent, CardFooter } from "@/components/ui/card"
 import { cn } from "@/lib/utils"
 import { FloatingArrow, FloatingOverlay, arrow, autoPlacement, autoUpdate, offset, shift, useFloating } from "@floating-ui/react"
 import { Slot } from "@radix-ui/react-slot"
-import { createContext, useCallback, useContext, useEffect, useRef, useState } from "react"
+import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from "react"
 
 export interface TourStep {
   target: string
@@ -14,10 +14,13 @@ export interface TourStep {
 
 interface UseTourProps {
   steps: TourStep[]
+  onFinish?: () => void
+  isEnabled?: boolean
+  onClose?: () => void
 }
 
-export function useTour({ steps }: UseTourProps) {
-  const [currentStep, setCurrentStep] = useState<number | null>(null)
+export function useTour({ steps, onFinish, isEnabled: controlledIsEnabled, onClose }: UseTourProps) {
+  const [currentStep, setCurrentStep] = useState<number | null>(controlledIsEnabled ? 0 : null)
   const arrowRef = useRef(null)
 
   const { elements, refs, floatingStyles, update, context } = useFloating({
@@ -25,13 +28,22 @@ export function useTour({ steps }: UseTourProps) {
     whileElementsMounted: autoUpdate,
   })
 
+  useEffect(() => {
+    if (controlledIsEnabled) {
+      setCurrentStep(0)
+    } else {
+      setCurrentStep(null)
+    }
+  }, [controlledIsEnabled])
+
   const startTour = useCallback(() => {
     setCurrentStep(0)
   }, [])
 
   const endTour = useCallback(() => {
     setCurrentStep(null)
-  }, [])
+    onClose?.()
+  }, [onClose])
 
   useEffect(() => {
     if (currentStep === null || steps.length === 0 || !steps[currentStep]) return
@@ -59,8 +71,9 @@ export function useTour({ steps }: UseTourProps) {
       setCurrentStep(currentStep + 1)
     } else {
       endTour()
+      onFinish?.()
     }
-  }, [currentStep, steps.length, endTour])
+  }, [currentStep, steps.length, endTour, onFinish])
 
   const prevStep = useCallback(() => {
     if (currentStep !== null && currentStep > 0) {
@@ -106,8 +119,20 @@ export function TourTrigger({
 
 const TourContext = createContext<ReturnType<typeof useTour> | null>(null)
 
-export function Tour({ children, steps }: { children: React.ReactNode; steps: TourStep[] }) {
-  const tour = useTour({ steps })
+export function Tour({
+  children,
+  steps,
+  onFinish,
+  isEnabled,
+  onClose,
+}: {
+  children: React.ReactNode
+  steps: TourStep[]
+  onFinish?: () => void
+  isEnabled?: boolean
+  onClose?: () => void
+}) {
+  const tour = useTour(useMemo(() => ({ steps, onFinish, isEnabled, onClose }), [steps, onFinish, isEnabled, onClose]))
   return <TourContext.Provider value={tour}>{children}</TourContext.Provider>
 }
 
@@ -117,38 +142,44 @@ export function useTourContext() {
   return tour
 }
 
-export function TourContent({
-  children,
-  className,
-  arrowClassName,
-}: { children: React.ReactNode; className?: string; arrowClassName?: string }) {
+export function TourOverlay() {
   const tour = useTourContext()
   if (!tour.isEnabled) return null
   const rect = tour.currentTarget?.getBoundingClientRect()
-
   return (
-    <>
-      <FloatingOverlay className="z-[9997]" onClick={tour.endTour} lockScroll>
-        <div
-          className="absolute bg-transparent rounded"
-          style={{
-            top: (rect?.top ?? 0) - 4,
-            left: (rect?.left ?? 0) - 4,
-            width: (rect?.width ?? 0) + 8,
-            height: (rect?.height ?? 0) + 8,
-            boxShadow: "0 0 0 9999px rgba(0, 0, 0, 0.7)",
-          }}
-        />
-      </FloatingOverlay>
-      <Card className={cn("max-w-sm z-[9998]", className)} {...tour.floatingProps}>
-        <FloatingArrow
-          ref={tour.arrowRef}
-          context={tour.context}
-          className={cn("fill-popover [&>path:first-of-type]:stroke-border [&>path:last-of-type]:stroke-border", arrowClassName)}
-        />
-        {children}
-      </Card>
-    </>
+    <FloatingOverlay className="z-[9997]" onClick={tour.endTour} lockScroll>
+      <div
+        className="absolute bg-transparent rounded"
+        style={{
+          top: (rect?.top ?? 0) - 4,
+          left: (rect?.left ?? 0) - 4,
+          width: (rect?.width ?? 0) + 8,
+          height: (rect?.height ?? 0) + 8,
+          boxShadow: "0 0 0 9999px rgba(0, 0, 0, 0.7)",
+        }}
+      />
+    </FloatingOverlay>
+  )
+}
+
+export function TourArrow({ className }: { className?: string }) {
+  const tour = useTourContext()
+  return (
+    <FloatingArrow
+      ref={tour.arrowRef}
+      context={tour.context}
+      className={cn("fill-popover [&>path:first-of-type]:stroke-border [&>path:last-of-type]:stroke-border", className)}
+    />
+  )
+}
+
+export function TourContent({ children, className }: { children: React.ReactNode; className?: string }) {
+  const tour = useTourContext()
+  if (!tour.isEnabled) return null
+  return (
+    <Card className={cn("max-w-sm z-[9998]", className)} {...tour.floatingProps}>
+      {children}
+    </Card>
   )
 }
 

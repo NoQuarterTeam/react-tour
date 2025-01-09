@@ -1,9 +1,9 @@
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
-import { Tour, TourContent, TourFooter, TourStep, TourTrigger } from "@/components/ui/tour"
-import { MenuIcon } from "lucide-react"
+import { Tour, TourArrow, TourContent, TourFooter, TourOverlay, TourStep, TourTrigger } from "@/components/ui/tour"
 import Link from "next/link"
+import { MenuIcon, WandSparklesIcon } from "lucide-react"
 
 const steps = [
   {
@@ -33,6 +33,9 @@ const steps = [
     step: (
       <div>
         <p>This is the third step of the tour.</p>
+        <Button size="sm" variant="outline">
+          Some action
+        </Button>
       </div>
     ),
   },
@@ -57,6 +60,7 @@ const steps = [
     step: (
       <div>
         <p>This is the sixth step of the tour.</p>
+        <p>Targets can be anything.</p>
       </div>
     ),
   },
@@ -70,11 +74,14 @@ export default function Page() {
       <div>
         <Tour steps={steps}>
           <TourTrigger asChild>
-            <Button variant="outline" className="flex-grow-0">
-              Start Tour
+            <Button className="flex-grow-0">
+              <span>Start Tour</span>
+              <WandSparklesIcon />
             </Button>
           </TourTrigger>
+          <TourOverlay />
           <TourContent>
+            <TourArrow />
             <TourStep />
             <TourFooter />
           </TourContent>
@@ -124,7 +131,7 @@ export default function Page() {
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
-      <div className="pt-[500px]">
+      <div className="pt-[250px]">
         <Card className="step-4">
           <CardHeader>
             <CardTitle>Step 4</CardTitle>
@@ -135,7 +142,7 @@ export default function Page() {
           </CardContent>
         </Card>
       </div>
-      <div className="pt-[500px]">
+      <div className="pt-[250px]">
         <Card className="step-5">
           <CardHeader>
             <CardTitle>Step 5</CardTitle>

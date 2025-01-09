@@ -21,7 +21,7 @@ bun install @floating-ui/react @radix-ui/react-slot
 3. Import the `Tour` component into your project and use it as needed.
 
 ```tsx
-import { Tour, TourContent, TourFooter, TourStep, TourTrigger } from "@/components/ui/tour"
+import { Tour, TourContent, TourOverlay, TourFooter, TourArrow, TourStep, TourTrigger } from "@/components/ui/tour"
 import { Button } from "@/components/ui/button"
 
 function App() {
@@ -35,11 +35,38 @@ function App() {
       <TourTrigger asChild>
         <Button>Start Tour</Button>
       </TourTrigger>
+      <TourOverlay />
       <TourContent>
+        <TourArrow />
         <TourStep />
         <TourFooter />
       </TourContent>
     </Tour>
+  )
+}
+```
+
+If you want to control the tour from outside the component, you can use the `isEnabled` prop and the `onClose` callback.
+
+```tsx
+import { Tour, TourContent, TourOverlay, TourFooter, TourArrow, TourStep } from "@/components/ui/tour"
+import { Button } from "@/components/ui/button"
+
+function App() {
+  const [isTourOpen, setIsTourOpen] = useState(false)
+
+  return (
+    <div>
+      <Button onClick={() => setIsTourOpen(true)}>Start Tour</Button>
+      <Tour steps={steps} isEnabled={isTourOpen} onClose={() => setIsTourOpen(false)}>
+        <TourOverlay />
+        <TourContent>
+          <TourArrow />
+          <TourStep />
+          <TourFooter />
+        </TourContent>
+      </Tour>
+    </div>
   )
 }
 ```
