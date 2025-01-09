@@ -10,7 +10,11 @@ A simple and customizable tour guide component for React applications, using tai
 
 ```bash
 npm install @floating-ui/react @radix-ui/react-slot
+```
+```bash
 pnpm install @floating-ui/react @radix-ui/react-slot
+```
+```bash
 bun install @floating-ui/react @radix-ui/react-slot
 ```
 
