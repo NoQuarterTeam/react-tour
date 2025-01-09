@@ -8,7 +8,7 @@ export const steps = [
     step: (
       <div className="flex flex-col gap-2">
         <p>
-          This is the first step of the tour. Go{" "}
+          Go{" "}
           <Link target="_blank" href="https://github.com/NoQuarterTeam/react-tour" className="text-blue-500 hover:underline">
             here
           </Link>{" "}

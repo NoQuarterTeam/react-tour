@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { Tour, TourArrow, TourContent, TourFooter, TourOverlay, TourStep, TourTrigger } from "@/components/ui/tour"
 import { MenuIcon, WandSparklesIcon } from "lucide-react"
@@ -17,7 +17,7 @@ export default function Page() {
         </Link>
       </div>
       <p>A simple and customizable tour guide component for React applications, using shadcn/ui and floating-ui.</p>
-      <div className="flex items-center gap-2">
+      <div className="flex justify-between gap-2">
         <Tour steps={steps}>
           <TourTrigger asChild>
             <Button className="flex-grow-0">
@@ -32,13 +32,26 @@ export default function Page() {
             <TourFooter />
           </TourContent>
         </Tour>
+        <div>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="outline" size="icon" className="step-6">
+                <MenuIcon />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent side="bottom" align="start">
+              <DropdownMenuItem>Item 1</DropdownMenuItem>
+              <DropdownMenuItem>Item 2</DropdownMenuItem>
+              <DropdownMenuItem>Item 3</DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
       </div>
 
       <div className="grid grid-cols-3 gap-4">
         <Card className="step-1">
           <CardHeader>
             <CardTitle>Step 1</CardTitle>
-            <CardDescription>This is the first step of the tour</CardDescription>
           </CardHeader>
           <CardContent>
             <p>This is the first step of the tour</p>
@@ -47,7 +60,6 @@ export default function Page() {
         <Card className="step-2">
           <CardHeader>
             <CardTitle>Step 2</CardTitle>
-            <CardDescription>This is the second step of the tour</CardDescription>
           </CardHeader>
           <CardContent>
             <p>This is the second step of the tour</p>
@@ -56,32 +68,17 @@ export default function Page() {
         <Card className="step-3">
           <CardHeader>
             <CardTitle>Step 3</CardTitle>
-            <CardDescription>This is the third step of the tour</CardDescription>
           </CardHeader>
           <CardContent>
             <p>This is the third step of the tour</p>
           </CardContent>
         </Card>
       </div>
-      <div>
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="outline" size="icon" className="step-6">
-              <MenuIcon />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent side="bottom" align="start">
-            <DropdownMenuItem>Item 1</DropdownMenuItem>
-            <DropdownMenuItem>Item 2</DropdownMenuItem>
-            <DropdownMenuItem>Item 3</DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      </div>
+
       <div className="pt-[250px]">
         <Card className="step-4">
           <CardHeader>
             <CardTitle>Step 4</CardTitle>
-            <CardDescription>This is the fourth step of the tour</CardDescription>
           </CardHeader>
           <CardContent>
             <p>This is the fourth step of the tour</p>
@@ -92,7 +89,6 @@ export default function Page() {
         <Card className="step-5">
           <CardHeader>
             <CardTitle>Step 5</CardTitle>
-            <CardDescription>This is the fifth step of the tour</CardDescription>
           </CardHeader>
           <CardContent>
             <p>This is the fifth step of the tour</p>
