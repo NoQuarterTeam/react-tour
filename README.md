@@ -1,6 +1,6 @@
 # React Tour
 
-A simple and customizable tour guide component for React applications, using tailwindcss, shadcn/ui and [@floating-ui](https://floating-ui.com/).
+A simple and customizable tour guide component for React applications, using shadcn/ui and [@floating-ui](https://floating-ui.com/).
 
 ## Installation
 
@@ -46,7 +46,7 @@ function App() {
 }
 ```
 
-If you want to control the tour from outside the component, you can use the `isEnabled` prop and the `onClose` callback.
+If you want to control the tour from outside the component, you can use the `isOpen` prop and the `onClose` callback.
 
 ```tsx
 import { Tour, TourContent, TourOverlay, TourFooter, TourArrow, TourStep } from "@/components/ui/tour"
@@ -58,7 +58,7 @@ function App() {
   return (
     <div>
       <Button onClick={() => setIsTourOpen(true)}>Start Tour</Button>
-      <Tour steps={steps} isEnabled={isTourOpen} onClose={() => setIsTourOpen(false)}>
+      <Tour steps={steps} isOpen={isTourOpen} onClose={() => setIsTourOpen(false)}>
         <TourOverlay />
         <TourContent>
           <TourArrow />

@@ -15,12 +15,12 @@ export interface TourStep {
 interface UseTourProps {
   steps: TourStep[]
   onFinish?: () => void
-  isEnabled?: boolean
+  isOpen?: boolean
   onClose?: () => void
 }
 
-export function useTour({ steps, onFinish, isEnabled: controlledIsEnabled, onClose }: UseTourProps) {
-  const [currentStep, setCurrentStep] = useState<number | null>(controlledIsEnabled ? 0 : null)
+export function useTour({ steps, onFinish, isOpen, onClose }: UseTourProps) {
+  const [currentStep, setCurrentStep] = useState<number | null>(isOpen ? 0 : null)
   const arrowRef = useRef(null)
 
   const { elements, refs, floatingStyles, update, context } = useFloating({
@@ -29,12 +29,12 @@ export function useTour({ steps, onFinish, isEnabled: controlledIsEnabled, onClo
   })
 
   useEffect(() => {
-    if (controlledIsEnabled) {
+    if (isOpen) {
       setCurrentStep(0)
     } else {
       setCurrentStep(null)
     }
-  }, [controlledIsEnabled])
+  }, [isOpen])
 
   const startTour = useCallback(() => {
     setCurrentStep(0)
