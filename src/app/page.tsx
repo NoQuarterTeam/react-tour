@@ -16,7 +16,9 @@ export default function Page() {
           <span className="sr-only">GitHub</span>
         </Link>
       </div>
-      <p>A simple and customizable tour guide component for React applications, using shadcn/ui and floating-ui.</p>
+      <p className="font-mono">
+        A simple and customizable tour guide component for React applications, using shadcn/ui and floating-ui.
+      </p>
       <div className="flex justify-between gap-2">
         <Tour steps={steps}>
           <TourTrigger asChild>

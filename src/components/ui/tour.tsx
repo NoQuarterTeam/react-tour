@@ -52,9 +52,7 @@ export function useTour(props?: UseTourProps) {
     if (target instanceof HTMLElement) {
       refs.setReference(target)
       update()
-      setTimeout(() => {
-        target.scrollIntoView({ behavior: "smooth", block: "start" })
-      }, 100)
+      target.scrollIntoView({ behavior: "smooth", block: "center" })
     } else {
       console.warn(`Tour target not found: ${props?.steps[currentStepIndex].target}`)
       end()
@@ -145,7 +143,7 @@ export function TourOverlay() {
   if (!tour.isEnabled) return null
   const rect = tour.currentTarget?.getBoundingClientRect()
   return (
-    <FloatingOverlay className="z-9997" onClick={tour.end} lockScroll>
+    <FloatingOverlay className="z-9997" onClick={tour.end}>
       <div
         className="absolute bg-transparent rounded"
         style={{
