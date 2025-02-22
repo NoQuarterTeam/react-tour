@@ -1,0 +1,32 @@
+{
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "typescript.preferences.autoImportFileExcludePatterns": ["@radix-ui/*", "cmdk"],
+  "editor.codeActionsOnSave": {
+    "source.organizeImports.biome": "explicit",
+    "source.fixAll.biome": "explicit",
+    "source.removeUnusedImports": "explicit"
+  },
+  "editor.defaultFormatter": "biomejs.biome",
+  "[prisma]": {
+    "editor.defaultFormatter": "Prisma.prisma"
+  },
+  "tailwindCSS.experimental.classRegex": [
+    ["cva\\(((?:[^()]|\\([^()]*\\))*)\\)", "[\"'`]?([^\"'`]+)[\"'`]?"],
+    ["cn\\(((?:[^()]|\\([^()]*\\))*)\\)", "(?:'|\"|`)([^']*)(?:'|\"|`)"]
+  ],
+  "tailwindCSS.classAttributes": ["class", "className", "classNames", ".*Styles*", ".*ClassName*", ".*ClassNames*"],
+  "workbench.editor.customLabels.patterns": {
+    "**/app/**/page.tsx": "${dirname} - page",
+    "**/app/**/layout.tsx": "${dirname} - layout",
+    "**/actions.ts": "${dirname} - actions",
+    "**/action.ts": "${dirname} - action",
+    "**/screen.tsx": "${dirname} - screen"
+  },
+  "explorer.fileNesting.enabled": true,
+  "explorer.fileNesting.patterns": {
+    "//": "Last update at 11/01/2025, 16:44:32",
+    ".env": "*.env, .env.*, .envrc, env.d.ts",
+    "next.config.*": ".next*, *.env, env.d.ts, next-env.d.ts, playwright.config.*, postcss.config.*, puppeteer.config.*, tailwind.config.*, tsconfig.*, reset.d.ts, sentry*, components.json",
+    "package.json": ".cursorignore, .gitignore, .cursorrules, .github*, .vscode*, biome.json*, bun.lock, bun.lockb, knip.*, pnpm*, renovate*, vercel*,"
+  }
+}
