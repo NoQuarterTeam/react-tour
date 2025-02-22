@@ -8,7 +8,7 @@ import { steps } from "./steps"
 
 export default function Page() {
   return (
-    <div className="flex gap-4 flex-col pt-20 max-w-3xl mx-auto h-[2000px]">
+    <div className="flex gap-4 flex-col pt-20 max-w-3xl mx-auto h-[2000px] px-2">
       <div className="flex justify-between">
         <h1 className="text-4xl font-bold">React Tour</h1>
         <Link target="_blank" rel="noreferrer" href="https://github.com/NoQuarterTeam/react-tour" className="hover:opacity-60">
@@ -48,7 +48,7 @@ export default function Page() {
         </div>
       </div>
 
-      <div className="grid grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         <Card className="step-1">
           <CardHeader>
             <CardTitle>Step 1</CardTitle>
