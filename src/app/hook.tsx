@@ -10,7 +10,7 @@ export function Hook() {
 
   return (
     <div>
-      <Button className="flex-grow-0" onClick={tour.start}>
+      <Button className="grow-0" onClick={tour.start}>
         <span>Start Tour (Hook)</span>
         <WandSparklesIcon />
       </Button>

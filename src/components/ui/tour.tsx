@@ -143,7 +143,7 @@ export function TourOverlay() {
   if (!tour.isEnabled) return null
   const rect = tour.currentTarget?.getBoundingClientRect()
   return (
-    <FloatingOverlay className="z-[9997]" onClick={tour.end} lockScroll>
+    <FloatingOverlay className="z-9997" onClick={tour.end} lockScroll>
       <div
         className="absolute bg-transparent rounded"
         style={{
@@ -173,7 +173,7 @@ export function TourContent({ children, className }: { children: React.ReactNode
   const tour = useTourContext()
   if (!tour.isEnabled) return null
   return (
-    <Card className={cn("max-w-sm z-[9998]", className)} {...tour.floatingProps}>
+    <Card className={cn("max-w-sm z-9998", className)} {...tour.floatingProps}>
       {children}
     </Card>
   )

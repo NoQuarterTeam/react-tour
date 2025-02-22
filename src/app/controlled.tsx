@@ -10,7 +10,7 @@ export function Controlled() {
   const [isOpen, setIsOpen] = useState(false)
   return (
     <div>
-      <Button className="flex-grow-0" onClick={() => setIsOpen(true)}>
+      <Button className="grow-0" onClick={() => setIsOpen(true)}>
         <span>Start Tour (Controlled)</span>
         <WandSparklesIcon />
       </Button>

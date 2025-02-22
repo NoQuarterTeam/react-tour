@@ -20,7 +20,7 @@ export default function Page() {
       <div className="flex justify-between gap-2">
         <Tour steps={steps}>
           <TourTrigger asChild>
-            <Button className="flex-grow-0">
+            <Button className="grow-0">
               <span>Start Tour</span>
               <WandSparklesIcon />
             </Button>
