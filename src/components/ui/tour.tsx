@@ -19,8 +19,8 @@ interface UseTourProps {
   onClose?: () => void
 }
 
-export function useTour(props?: UseTourProps) {
-  const [currentStepIndex, setCurrentStepIndex] = useState<number | null>(props?.isOpen ? 0 : null)
+export function useTour(props: UseTourProps) {
+  const [currentStepIndex, setCurrentStepIndex] = useState<number | null>(props.isOpen ? 0 : null)
   const arrowRef = useRef(null)
 
   const { elements, refs, floatingStyles, context } = useFloating({
@@ -28,13 +28,17 @@ export function useTour(props?: UseTourProps) {
     whileElementsMounted: autoUpdate,
   })
 
+  const isEnabled = currentStepIndex !== null
+  const currentStep = isEnabled ? props.steps[currentStepIndex] : undefined
+  const target = currentStep?.target
+
   useEffect(() => {
-    if (props?.isOpen) {
+    if (props.isOpen) {
       setCurrentStepIndex(0)
     } else {
       setCurrentStepIndex(null)
     }
-  }, [props?.isOpen])
+  }, [props.isOpen])
 
   const start = useCallback(() => {
     setCurrentStepIndex(0)
@@ -42,18 +46,22 @@ export function useTour(props?: UseTourProps) {
 
   const end = useCallback(() => {
     setCurrentStepIndex(null)
-    props?.onClose?.()
-  }, [props?.onClose])
+    props.onClose?.()
+  }, [props.onClose])
 
   useEffect(() => {
-    if (currentStepIndex === null || props?.steps.length === 0 || !props?.steps[currentStepIndex]) return
-    const target = document.querySelector(`.${props?.steps[currentStepIndex].target}`)
+    if (!isEnabled || !target) return
+    const targetElement = document.querySelector(`.${target}`)
 
-    if (target instanceof HTMLElement) {
-      refs.setReference(target)
-      target.scrollIntoView({ behavior: "smooth", block: "center" })
+    if (targetElement instanceof HTMLElement) {
+      refs.setReference(targetElement)
+      try {
+        targetElement.scrollIntoView({ behavior: "smooth", block: "center" })
+      } catch (error) {
+        console.warn("Failed to scroll to target element:", error)
+      }
     } else {
-      console.warn(`Tour target not found: ${props?.steps[currentStepIndex].target}`)
+      console.warn(`Tour target not found: ${target}`)
       end()
     }
     const listener = (event: KeyboardEvent) => {
@@ -63,16 +71,16 @@ export function useTour(props?: UseTourProps) {
     return () => {
       document.removeEventListener("keydown", listener)
     }
-  }, [currentStepIndex, end, props?.steps, refs])
+  }, [end, refs, target, isEnabled])
 
   const nextStep = useCallback(() => {
-    if (currentStepIndex !== null && currentStepIndex < (props?.steps?.length ?? 0) - 1) {
+    if (currentStepIndex !== null && currentStepIndex < props.steps.length - 1) {
       setCurrentStepIndex(currentStepIndex + 1)
     } else {
       end()
-      props?.onFinish?.()
+      props.onFinish?.()
     }
-  }, [currentStepIndex, props?.steps.length, end, props?.onFinish])
+  }, [currentStepIndex, props.steps.length, end, props.onFinish])
 
   const prevStep = useCallback(() => {
     if (currentStepIndex !== null && currentStepIndex > 0) {
@@ -83,18 +91,18 @@ export function useTour(props?: UseTourProps) {
   return {
     arrowRef,
     context,
-    currentStep: props?.steps?.[currentStepIndex ?? 0]!,
+    currentStep,
     currentStepIndex: currentStepIndex ?? 0,
     currentTarget: elements.reference,
     end,
     floatingProps: { ref: refs.setFloating, style: floatingStyles },
-    isEnabled: currentStepIndex !== null,
-    isLastStep: currentStepIndex === (props?.steps?.length ?? 0) - 1,
+    isEnabled,
+    isLastStep: currentStepIndex === (props.steps.length ?? 0) - 1,
     nextStep,
     prevStep,
     refs,
     start,
-    steps: props?.steps ?? [],
+    steps: props.steps,
   }
 }
 
@@ -108,9 +116,7 @@ export function TourTrigger({
     <Comp
       {...props}
       onClick={(event) => {
-        if (!event.defaultPrevented) {
-          tour?.start()
-        }
+        if (!event.defaultPrevented) tour?.start()
       }}
     />
   )
@@ -118,15 +124,7 @@ export function TourTrigger({
 
 const TourContext = createContext<ReturnType<typeof useTour> | null>(null)
 
-export function Tour({
-  children,
-  steps,
-  onFinish,
-  isOpen,
-  onClose,
-}: {
-  children: React.ReactNode
-} & UseTourProps) {
+export function Tour({ children, steps, onFinish, isOpen, onClose }: { children: React.ReactNode } & UseTourProps) {
   const tour = useTour(useMemo(() => ({ steps, onFinish, isOpen, onClose }), [steps, onFinish, isOpen, onClose]))
   return <TourContext.Provider value={tour}>{children}</TourContext.Provider>
 }
@@ -140,9 +138,11 @@ export function useTourContext() {
 export function TourOverlay() {
   const tour = useTourContext()
   if (!tour.isEnabled) return null
+
   const rect = tour.currentTarget?.getBoundingClientRect()
+
   return (
-    <FloatingOverlay className="z-9997" onClick={tour.end}>
+    <FloatingOverlay className="z-9997" onClick={tour.end} lockScroll={false}>
       <div
         className="absolute bg-transparent rounded"
         style={{
@@ -180,6 +180,7 @@ export function TourContent({ children, className }: { children: React.ReactNode
 
 export function TourStep({ className }: { className?: string }) {
   const tour = useTourContext()
+  if (!tour.currentStep) return null
   return <CardContent className={cn("p-4", className)}>{tour.currentStep.step}</CardContent>
 }
 
