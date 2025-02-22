@@ -52,7 +52,9 @@ export function useTour(props?: UseTourProps) {
     if (target instanceof HTMLElement) {
       refs.setReference(target)
       update()
-      target.scrollIntoView({ behavior: "smooth", block: "center" })
+      setTimeout(() => {
+        target.scrollIntoView({ behavior: "smooth", block: "center" })
+      }, 100)
     } else {
       console.warn(`Tour target not found: ${props?.steps[currentStepIndex].target}`)
       end()
