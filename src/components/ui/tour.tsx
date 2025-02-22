@@ -23,7 +23,7 @@ export function useTour(props?: UseTourProps) {
   const [currentStepIndex, setCurrentStepIndex] = useState<number | null>(props?.isOpen ? 0 : null)
   const arrowRef = useRef(null)
 
-  const { elements, refs, floatingStyles, update, context } = useFloating({
+  const { elements, refs, floatingStyles, context } = useFloating({
     middleware: [offset(10), shift(), autoPlacement(), arrow({ element: arrowRef })],
     whileElementsMounted: autoUpdate,
   })
@@ -51,7 +51,6 @@ export function useTour(props?: UseTourProps) {
 
     if (target instanceof HTMLElement) {
       refs.setReference(target)
-      update()
       target.scrollIntoView({ behavior: "smooth", block: "center" })
     } else {
       console.warn(`Tour target not found: ${props?.steps[currentStepIndex].target}`)
@@ -64,7 +63,7 @@ export function useTour(props?: UseTourProps) {
     return () => {
       document.removeEventListener("keydown", listener)
     }
-  }, [currentStepIndex, update, end, props?.steps, refs])
+  }, [currentStepIndex, end, props?.steps, refs])
 
   const nextStep = useCallback(() => {
     if (currentStepIndex !== null && currentStepIndex < (props?.steps?.length ?? 0) - 1) {
