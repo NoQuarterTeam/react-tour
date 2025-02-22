@@ -19,7 +19,7 @@ export function Hook() {
         <>
           <div className="inset-0 fixed bg-black/50" onClick={tour.end} onKeyDown={tour.end} />
           <div {...tour.floatingProps} className="p-2 max-w-sm rounded bg-white shadow-md">
-            {tour.currentStep.step}
+            {tour.currentStep?.step}
             <div className="flex justify-between">
               <button type="button" onClick={tour.prevStep} disabled={tour.currentStepIndex === 0}>
                 Previous
